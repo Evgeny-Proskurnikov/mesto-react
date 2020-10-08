@@ -9,7 +9,7 @@ function App() {
   const [isEditProfilePopupOpen, setProfilePopupState] = React.useState(false);
   const [isAddPlacePopupOpen, setPlacePopupState] = React.useState(false);
   const [isEditAvatarPopupOpen, setAvatarPopupState] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState();
 
   function handleEditAvatarClick() {
     setAvatarPopupState(true);  
@@ -31,7 +31,7 @@ function App() {
     setPlacePopupState(false);
     setProfilePopupState(false);
     setAvatarPopupState(false);
-    setSelectedCard(false);
+    setSelectedCard(undefined);
   }
 
   return (
@@ -48,13 +48,13 @@ function App() {
       <PopupWithForm 
         title='Редактировать профиль' 
         name='edit-profile' 
-        isOpen={isEditProfilePopupOpen ? 'modal_opened' : ''} 
+        modalState={isEditProfilePopupOpen ? 'modal_opened' : ''} 
         onClose={closeAllPopups}
         children={
         <form action="#" name="edit-profile" className="modal__form modal__form_type_profile" noValidate>
-          <input id="name-input" name="name" type="text" className="modal__input modal__input_type_name" defaultValue="" required minLength="2" maxLength="40" autoComplete="off"/>
+          <input id="name-input" name="name" type="text" className="modal__input modal__input_type_name" placeholder="Имя" required minLength="2" maxLength="40" autoComplete="off"/>
           <span id="name-input-error" className="modal__input-error"></span>
-          <input id="character-input" name="about" type="text" className="modal__input modal__input_type_character" defaultValue="" required minLength="2" maxLength="200" autoComplete="off"/>
+          <input id="character-input" name="about" type="text" className="modal__input modal__input_type_character" placeholder="Занятие" required minLength="2" maxLength="200" autoComplete="off"/>
           <span id="character-input-error" className="modal__input-error"></span>
           <button type="submit" className="modal__save-button">Сохранить</button>
         </form>
@@ -63,7 +63,7 @@ function App() {
       <PopupWithForm 
         title='Новое место' 
         name='add-card' 
-        isOpen={isAddPlacePopupOpen ? 'modal_opened' : ''} 
+        modalState={isAddPlacePopupOpen ? 'modal_opened' : ''} 
         onClose={closeAllPopups}
         children={
         <form action="#" name="add-card" className="modal__form modal__form_type_addcard" noValidate>
@@ -78,7 +78,7 @@ function App() {
       <PopupWithForm 
         title='Обновить аватар' 
         name='edit-avatar' 
-        isOpen={isEditAvatarPopupOpen ? 'modal_opened' : ''} 
+        modalState={isEditAvatarPopupOpen ? 'modal_opened' : ''} 
         onClose={closeAllPopups}
         children={
         <form action="#" name="edit-avatar" className="modal__form modal__form_type_avatar" noValidate>
@@ -94,7 +94,7 @@ function App() {
 
       <PopupWithForm title='Что-то пошло не так...' name='error'   containerClass='modal__conteiner_type_error'/>
 
-      <ImagePopup card={selectedCard} isOpen={selectedCard ? 'modal_opened' : ''} onClose={closeAllPopups} />
+      <ImagePopup card={selectedCard} modalState={selectedCard && 'modal_opened'} onClose={closeAllPopups} />
     </div>
   );
 }

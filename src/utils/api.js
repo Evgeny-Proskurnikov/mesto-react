@@ -109,26 +109,9 @@ export class Api {
       })
   }
 
-  likeCard(cardId) {
+  likeCard(cardId, like) {
     return fetch(`${this._url}/cards/likes/${cardId}`, {
-      method: 'PUT',
-      headers: {
-        authorization: this._token,
-        'Content-type': 'application/json'
-      }
-    })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
-  }
-
-  dislikeCard(cardId) {
-    return fetch(`${this._url}/cards/likes/${cardId}`, {
-      method: 'DELETE',
+      method: like ? 'PUT' : 'DELETE',
       headers: {
         authorization: this._token,
         'Content-type': 'application/json'
