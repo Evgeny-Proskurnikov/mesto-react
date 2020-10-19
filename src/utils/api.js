@@ -109,9 +109,9 @@ export class Api {
       })
   }
 
-  likeCard(cardId, like) {
+  changeLikeCardStatus(cardId, isLiked) {
     return fetch(`${this._url}/cards/likes/${cardId}`, {
-      method: like ? 'PUT' : 'DELETE',
+      method: isLiked ? 'DELETE' : 'PUT',
       headers: {
         authorization: this._token,
         'Content-type': 'application/json'
