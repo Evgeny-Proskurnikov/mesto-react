@@ -16,7 +16,7 @@ function App() {
   const [isEditProfilePopupOpen, setProfilePopupState] = React.useState(false);
   const [isAddPlacePopupOpen, setPlacePopupState] = React.useState(false);
   const [isEditAvatarPopupOpen, setAvatarPopupState] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState();
+  const [selectedCard, setSelectedCard] = React.useState({link: ''});
   const [currentUser, setCurrentUser] = React.useState(userObj);
   const [cards, setCards] = React.useState([]);
 
@@ -77,7 +77,7 @@ function App() {
     setPlacePopupState(false);
     setProfilePopupState(false);
     setAvatarPopupState(false);
-    setSelectedCard(undefined);
+    setSelectedCard({link: ''});
   }
 
   function handleUpdateUser(userStateObj) {
@@ -109,7 +109,7 @@ function App() {
   function handleAddPlaceSubmit(card) {
     apiRequest.postCard(card)
     .then((newCard) => {
-      setCards([...cards, newCard]);
+      setCards([newCard, ...cards]);
     })
     .catch(err => {
       console.log(err);
@@ -147,7 +147,7 @@ function App() {
 
           <PopupWithForm title='Что-то пошло не так...' name='error'   containerClass='modal__conteiner_type_error'/>
 
-          <ImagePopup card={selectedCard} modalState={selectedCard && 'modal_opened'} onClose={closeAllPopups} />
+          <ImagePopup card={selectedCard} modalState={selectedCard.link && 'modal_opened'} onClose={closeAllPopups} />
         </div>
       </CardsContext.Provider>
     </CurrentUserContext.Provider>
