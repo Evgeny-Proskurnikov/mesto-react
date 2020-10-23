@@ -2,23 +2,34 @@ import React from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import apiRequest from '../utils/api';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
+import DeleteCardPopup from './DeleteCardPopup';
+import ErrorPopup from './ErrorPopup';
 import { CurrentUserContext, userObj } from '../contexts/CurrentUserContext';
 import { CardsContext } from '../contexts/CardsContext';
+import { FormSubmitStateContext } from '../contexts/FormSubmitStateContext';
 
 
 function App() {
   const [isEditProfilePopupOpen, setProfilePopupState] = React.useState(false);
   const [isAddPlacePopupOpen, setPlacePopupState] = React.useState(false);
   const [isEditAvatarPopupOpen, setAvatarPopupState] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({link: ''});
+  const [isDeleteCardPopupOpen, setDeleteCardPopupState] = React.useState(false);
+  const [isErrorPopupOpen, setErrorPopupState] = React.useState(false);
+  const [isImagePopupOpen, setImagePopupState] = React.useState(false);
+
+  const [error, setErrorState] = React.useState('');
+  const [cardToDelete, setCardToDelete] = React.useState({});
+  const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState(userObj);
   const [cards, setCards] = React.useState([]);
+  const [submitState, setSubmitState] = React.useState(false);
+
+  const formSubmitState = {state: submitState, setState: setSubmitState};
 
   React.useEffect(() => {
     Promise.all([apiRequest.getUserInfo(), apiRequest.getInitialCards()])
@@ -28,8 +39,107 @@ function App() {
     })
     .catch(err => {
       console.log(err);
+      handleErrorMessage(err);
     })
-  }, []);
+  }, []); // eslint-disable-line
+
+  function setEscListener() {
+    document.addEventListener('keyup', handleEscPopupClose);
+  }
+
+  function handleEditAvatarClick() {
+    setAvatarPopupState(true);
+    setEscListener();
+  }
+
+  function handleEditProfileClick() {
+    setProfilePopupState(true);
+    setEscListener();
+  }
+
+  function handleAddPlaceClick() {
+    setPlacePopupState(true);
+    setEscListener();
+  }
+
+  function handleDeleteCardClick(card) {
+    setDeleteCardPopupState(true);
+    setCardToDelete(card);
+    setEscListener();
+  }
+
+  function handleCardClick(card) {
+    setSelectedCard(card);
+    setImagePopupState(true);
+    setEscListener();
+  }
+
+  function handleErrorMessage(err) {
+    setErrorState(err);
+    setErrorPopupState(true);
+    setEscListener();
+  }
+
+  function closeAllPopups() {
+    setPlacePopupState(false);
+    setProfilePopupState(false);
+    setAvatarPopupState(false);
+    setDeleteCardPopupState(false);
+    setErrorPopupState(false);
+    setImagePopupState(false);
+    document.removeEventListener('keyup', handleEscPopupClose);
+  }
+
+  function handleEscPopupClose(evt) {
+    if (evt.key === 'Escape') {
+      closeAllPopups();
+    }
+  }
+
+  function handleUpdateUser(userStateObj) {
+    apiRequest.saveUserInfo(userStateObj)
+    .then((user) => {
+      setCurrentUser(user);
+    })
+    .catch(err => {
+      console.log(err);
+      handleErrorMessage(err);
+    })
+    .finally(() => {
+      setProfilePopupState(false);
+      setSubmitState(false);
+    })
+  }
+
+  function handleUpdateAvatar(avatarStateObj) {
+    apiRequest.saveAvatar(avatarStateObj)
+    .then((avatar) => {
+      setCurrentUser(avatar);
+    })
+    .catch(err => {
+      console.log(err);
+      handleErrorMessage(err);
+    })
+    .finally(() => {
+      setAvatarPopupState(false);
+      setSubmitState(false);
+    })
+  }
+
+  function handleAddPlaceSubmit(card) {
+    apiRequest.postCard(card)
+    .then((newCard) => {
+      setCards([newCard, ...cards]);
+    })
+    .catch(err => {
+      console.log(err);
+      handleErrorMessage(err);
+    })
+    .finally(() => {
+      setPlacePopupState(false);
+      setSubmitState(false);
+    })
+  }
 
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -43,79 +153,23 @@ function App() {
     })
     .catch(err => {
       console.log(err);
+      handleErrorMessage(err);
     })
   } 
 
-  function handleCardDelete(card) {    
-    apiRequest.delCard(card._id)
+  function handleCardDelete() {    
+    apiRequest.delCard(cardToDelete._id)
     .then(() => {
-      const newCards = cards.filter((c) => c._id !== card._id);
+      const newCards = cards.filter((c) => c._id !== cardToDelete._id);
       setCards(newCards);
     })
     .catch(err => {
       console.log(err);
-    })
-  }
-
-  function handleEditAvatarClick() {
-    setAvatarPopupState(true);  
-  }
-
-  function handleEditProfileClick() {
-    setProfilePopupState(true);
-  }
-
-  function handleAddPlaceClick() {
-    setPlacePopupState(true);
-  }
-
-  function handleCardClick(card) {
-    setSelectedCard(card);
-  }
-
-  function closeAllPopups() {
-    setPlacePopupState(false);
-    setProfilePopupState(false);
-    setAvatarPopupState(false);
-    setSelectedCard({link: ''});
-  }
-
-  function handleUpdateUser(userStateObj) {
-    apiRequest.saveUserInfo(userStateObj)
-    .then((user) => {
-      setCurrentUser(user);
-    })
-    .catch(err => {
-      console.log(err);
+      handleErrorMessage(err);
     })
     .finally(() => {
-      setProfilePopupState(false);
-    })
-  }
-
-  function handleUpdateAvatar(avatarStateObj) {
-    apiRequest.saveAvatar(avatarStateObj)
-    .then((avatar) => {
-      setCurrentUser(avatar);
-    })
-    .catch(err => {
-      console.log(err);
-    })
-    .finally(() => {
-      setAvatarPopupState(false);
-    })
-  }
-
-  function handleAddPlaceSubmit(card) {
-    apiRequest.postCard(card)
-    .then((newCard) => {
-      setCards([newCard, ...cards]);
-    })
-    .catch(err => {
-      console.log(err);
-    })
-    .finally(() => {
-      setPlacePopupState(false);
+      setDeleteCardPopupState(false);
+      setSubmitState(false);
     })
   }
 
@@ -131,23 +185,20 @@ function App() {
           onCardClick={handleCardClick}
           cards={cards}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
+          onCardDelete={handleDeleteCardClick}
           />
           <Footer />
 
-          <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
+          <FormSubmitStateContext.Provider value={formSubmitState}>
+            <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
+            <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
+            <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} /> 
+            <DeleteCardPopup isOpen={isDeleteCardPopupOpen} onClose={closeAllPopups} onCardDelete={handleCardDelete} /> 
+          </FormSubmitStateContext.Provider>
+          
+          <ErrorPopup isOpen={isErrorPopupOpen} onClose={closeAllPopups} errCode={error} /> 
 
-          <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
-
-          <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} /> 
-
-          <PopupWithForm title='Вы уверены?' name='del-card'  children={
-            <button type="button" className="modal__confirm-button">Да</button>
-          }/>
-
-          <PopupWithForm title='Что-то пошло не так...' name='error'   containerClass='modal__conteiner_type_error'/>
-
-          <ImagePopup card={selectedCard} modalState={selectedCard.link && 'modal_opened'} onClose={closeAllPopups} />
+          <ImagePopup card={selectedCard} modalState={isImagePopupOpen && 'modal_opened'} onClose={closeAllPopups} />
         </div>
       </CardsContext.Provider>
     </CurrentUserContext.Provider>
