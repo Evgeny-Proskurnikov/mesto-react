@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/mesto-react/static/css/main.9fa23aa6.chunk.css",
-    "main.js": "/mesto-react/static/js/main.b891e238.chunk.js",
-    "main.js.map": "/mesto-react/static/js/main.b891e238.chunk.js.map",
+    "main.js": "/mesto-react/static/js/main.4e4b17e0.chunk.js",
+    "main.js.map": "/mesto-react/static/js/main.4e4b17e0.chunk.js.map",
     "runtime-main.js": "/mesto-react/static/js/runtime-main.36fb0e45.js",
     "runtime-main.js.map": "/mesto-react/static/js/runtime-main.36fb0e45.js.map",
-    "static/js/2.096056a2.chunk.js": "/mesto-react/static/js/2.096056a2.chunk.js",
-    "static/js/2.096056a2.chunk.js.map": "/mesto-react/static/js/2.096056a2.chunk.js.map",
+    "static/js/2.a956d509.chunk.js": "/mesto-react/static/js/2.a956d509.chunk.js",
+    "static/js/2.a956d509.chunk.js.map": "/mesto-react/static/js/2.a956d509.chunk.js.map",
     "index.html": "/mesto-react/index.html",
-    "precache-manifest.bf9cbb95a52e9fe6789a1dafc462a044.js": "/mesto-react/precache-manifest.bf9cbb95a52e9fe6789a1dafc462a044.js",
+    "precache-manifest.69d7189f86cd9f00fdd87549af5dcae2.js": "/mesto-react/precache-manifest.69d7189f86cd9f00fdd87549af5dcae2.js",
     "service-worker.js": "/mesto-react/service-worker.js",
     "static/css/main.9fa23aa6.chunk.css.map": "/mesto-react/static/css/main.9fa23aa6.chunk.css.map",
-    "static/js/2.096056a2.chunk.js.LICENSE.txt": "/mesto-react/static/js/2.096056a2.chunk.js.LICENSE.txt",
+    "static/js/2.a956d509.chunk.js.LICENSE.txt": "/mesto-react/static/js/2.a956d509.chunk.js.LICENSE.txt",
     "static/media/index.css": "/mesto-react/static/media/profile_edit-button.6bfdb354.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.36fb0e45.js",
-    "static/js/2.096056a2.chunk.js",
+    "static/js/2.a956d509.chunk.js",
     "static/css/main.9fa23aa6.chunk.css",
-    "static/js/main.b891e238.chunk.js"
+    "static/js/main.4e4b17e0.chunk.js"
   ]
 }
