@@ -58,7 +58,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
             id="url-input-error" 
             className={errors.avatar ? "modal__input-error modal__input-error_active" : "modal__input-error"}
           >
-            {errors.avatar && errors.avatar.message}
+            {isOpen ? (errors.avatar && errors.avatar.message) : errors.avatar = false}
           </span>
           
           <button 

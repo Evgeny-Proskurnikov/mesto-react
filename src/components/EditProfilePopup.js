@@ -10,34 +10,38 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   const formSubmitState = React.useContext(FormSubmitStateContext);
 
   const { register, handleSubmit, errors } = useForm({mode: 'onChange'});
+  const onSubmit = data => {
+    formSubmitState.setState(true);
+    onUpdateUser(data);
+  };
 
-  const [name, setName] = React.useState('');
-  const [description, setDescription] = React.useState('');
+  // const [name, setName] = React.useState('');
+  // const [description, setDescription] = React.useState('');
 
   // После загрузки текущего пользователя из API
   // его данные будут использованы в управляемых компонентах.
-  React.useEffect(() => {
-    setName(currentUser.name);
-    setDescription(currentUser.about);
-  }, [currentUser]); 
+  // React.useEffect(() => {
+  //   setName(currentUser.name);
+  //   setDescription(currentUser.about);
+  // }, [currentUser]); 
  
-  function handleNameChange(evt) {
-    setName(evt.target.value)
-  }
+  // function handleNameChange(evt) {
+  //   setName(evt.target.value)
+  // }
 
-  function handleDescriptionChange(evt) {
-    setDescription(evt.target.value)
-  }
+  // function handleDescriptionChange(evt) {
+  //   setDescription(evt.target.value)
+  // }
 
-  function onSubmit(data) {
-    formSubmitState.setState(true);
+  // function onSubmit(data) {
+  //   formSubmitState.setState(true);
 
-    // Передаём значения управляемых компонентов во внешний обработчик
-    onUpdateUser({
-      name,
-      about: description,
-    });
-  }
+  //   // Передаём значения управляемых компонентов во внешний обработчик
+  //   onUpdateUser({
+  //     name: name,
+  //     about: description,
+  //   });
+  // }
 
   return (
     <PopupWithForm 
@@ -52,13 +56,13 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
           name="name" 
           type="text" 
           className={errors.name ? "modal__input modal__input_type_error" : "modal__input"}
-          defaultValue={name} 
+          defaultValue={currentUser.name} 
           ref={register({ 
             required: {value: true, message: 'Заполните это поле'}, 
             minLength: {value: 2, message: 'Текст должен содержать не менее 2 симв.'}, 
             maxLength: 40, 
           })}
-          onChange={handleNameChange} 
+          // onChange={handleNameChange} 
           placeholder="Имя" 
           autoComplete="off"
         />
@@ -67,7 +71,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
           id="name-input-error" 
           className={errors.name ? "modal__input-error modal__input-error_active" : "modal__input-error"}
         >
-          {errors.name && errors.name.message}
+          {isOpen ? (errors.name && errors.name.message) : errors.name = false }
         </span>
 
         <input 
@@ -75,13 +79,13 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
           name="about" 
           type="text" 
           className={errors.about ? "modal__input modal__input_type_error" : "modal__input"}
-          defaultValue={description} 
+          defaultValue={currentUser.about} 
           ref={register({ 
             required: {value: true, message: 'Заполните это поле'}, 
             minLength: {value: 2, message: 'Текст должен содержать не менее 2 симв.'}, 
             maxLength: 200, 
           })}
-          onChange={handleDescriptionChange} 
+          // onChange={handleDescriptionChange} 
           placeholder="Занятие"
           autoComplete="off"
         />
@@ -90,7 +94,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
           id="character-input-error" 
           className={errors.about ? "modal__input-error modal__input-error_active" : "modal__input-error"}
         >
-          {errors.about && errors.about.message}
+          {isOpen ? (errors.about && errors.about.message) : errors.about = false }
         </span>
 
         <button 
@@ -99,7 +103,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
           disabled={(errors.name || errors.about) && true}
         >
           {formSubmitState.state ? 'Сохранение...' : 'Сохранить'}
-        </button>
+        </button> 
       </form>
     }/>
   );

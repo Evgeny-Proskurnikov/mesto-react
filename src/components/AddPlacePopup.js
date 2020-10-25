@@ -10,7 +10,6 @@ function AddPlacePopup ({ isOpen, onClose, onAddPlace }) {
   const formSubmitState = React.useContext(FormSubmitStateContext);
   const { register, handleSubmit, errors } = useForm({mode: 'onChange'});
 
-
   function handleNameChange(evt) {
     setName(evt.target.value)
   }
@@ -55,7 +54,7 @@ function AddPlacePopup ({ isOpen, onClose, onAddPlace }) {
           id="place-input-error" 
           className={errors.name ? "modal__input-error modal__input-error_active" : "modal__input-error"}
         >
-          {errors.name && errors.name.message}
+          {isOpen ? (errors.name && errors.name.message) : errors.name = false}
         </span>
 
         <input 
@@ -79,7 +78,7 @@ function AddPlacePopup ({ isOpen, onClose, onAddPlace }) {
           id="url-input-error" 
           className={errors.link ? "modal__input-error modal__input-error_active" : "modal__input-error"}
         >
-          {errors.link && errors.link.message}
+          {isOpen ? (errors.link && errors.link.message) : errors.link = false}
         </span>
         
         <button 

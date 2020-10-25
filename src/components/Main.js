@@ -5,7 +5,8 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext'
 function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onCardLike, onCardDelete }) {
   const currentUser = React.useContext(CurrentUserContext);
 
-  return (
+  
+  return currentUser.name ? (
     <main className="content">
       <section className="profile">
         <div className="profile__overlay" onClick={onEditAvatar}>
@@ -22,7 +23,11 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onC
         {cards.map(el => <Card card={el} key={el._id} onCardClick={onCardClick} onCardLike={onCardLike} onCardDelete={onCardDelete}/>)}
       </section>
     </main>
-  );
+  ) : (
+    <main className="content">
+      <div className="spinner"><i></i></div>
+    </main>
+  )
 }
 
 export default Main;
