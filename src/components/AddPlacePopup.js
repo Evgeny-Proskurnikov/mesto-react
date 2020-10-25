@@ -8,7 +8,7 @@ function AddPlacePopup ({ isOpen, onClose, onAddPlace }) {
   const [name, setName] = React.useState('');
   const [link, setLink] = React.useState('');
   const formSubmitState = React.useContext(FormSubmitStateContext);
-  const { register, handleSubmit, errors } = useForm({mode: 'onChange'});
+  const { register, handleSubmit, errors } = useForm({mode: 'onSubmit'});
 
   function handleNameChange(evt) {
     setName(evt.target.value)
@@ -34,7 +34,7 @@ function AddPlacePopup ({ isOpen, onClose, onAddPlace }) {
       modalState={isOpen ? 'modal_opened' : ''} 
       onClose={onClose}
       children={
-      <form action="#" name="add-card" className="modal__form modal__form_type_addcard" onSubmit={handleSubmit(onSubmit)}>
+      <form action="#" name="add-card" className="modal__form modal__form_type_addcard" onSubmit={handleSubmit(onSubmit)} noValidate>
         <input 
           id="place-input" 
           name="name" type="text" 

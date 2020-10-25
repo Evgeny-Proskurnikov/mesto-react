@@ -7,25 +7,24 @@ import { useForm } from "react-hook-form";
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
   // const avatarInputRef = React.useRef();
 
-  const formSubmitState = React.useContext(FormSubmitStateContext);
-  const [avatar, setAvatar] = React.useState('');
-  const { register, handleSubmit, errors } = useForm({mode: 'onChange'});
- 
   // function handleUrlChange(evt) {
   //   avatarInputRef.current.value = evt.target.value;
   // }
 
-  function handleUrlChange(evt) {
-    setAvatar(evt.target.value);
-  }
+  // function onSubmit() {
+  //   formSubmitState.setState(true);
 
-  function onSubmit() {
+  //   onUpdateAvatar({
+  //     // avatar: avatarInputRef.current.value,
+  //   });
+  // }
+
+  const formSubmitState = React.useContext(FormSubmitStateContext);
+  const { register, handleSubmit, errors } = useForm({mode: 'onSubmit'});
+ 
+  function onSubmit(data) {
     formSubmitState.setState(true);
-
-    onUpdateAvatar({
-      // avatar: avatarInputRef.current.value,
-      avatar: avatar,
-    });
+    onUpdateAvatar(data);
   }
 
   return (
@@ -35,7 +34,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
       modalState={isOpen ? 'modal_opened' : ''} 
       onClose={onClose}
       children={
-        <form action="#" name="edit-avatar" className="modal__form modal__form_type_avatar" onSubmit={handleSubmit(onSubmit)}>
+        <form action="#" name="edit-avatar" className="modal__form modal__form_type_avatar" onSubmit={handleSubmit(onSubmit)} noValidate>
           <input 
             id="url-input" 
             name="avatar" 
@@ -49,7 +48,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
                 maxLength: 200,  
               })
             } 
-            onChange={handleUrlChange} 
+            // onChange={handleUrlChange} 
             placeholder="Ссылка на аватар" 
             autoComplete="off"
           />

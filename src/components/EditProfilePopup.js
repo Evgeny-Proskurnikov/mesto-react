@@ -6,15 +6,6 @@ import { useForm } from "react-hook-form";
 
 
 function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
-  const currentUser = React.useContext(CurrentUserContext);
-  const formSubmitState = React.useContext(FormSubmitStateContext);
-
-  const { register, handleSubmit, errors } = useForm({mode: 'onChange'});
-  const onSubmit = data => {
-    formSubmitState.setState(true);
-    onUpdateUser(data);
-  };
-
   // const [name, setName] = React.useState('');
   // const [description, setDescription] = React.useState('');
 
@@ -43,6 +34,15 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   //   });
   // }
 
+  const currentUser = React.useContext(CurrentUserContext);
+  const formSubmitState = React.useContext(FormSubmitStateContext);
+
+  const { register, handleSubmit, errors } = useForm({mode: 'onChange'});
+  const onSubmit = data => {
+    formSubmitState.setState(true);
+    onUpdateUser(data);
+  };
+
   return (
     <PopupWithForm 
       title='Редактировать профиль' 
@@ -50,7 +50,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       modalState={isOpen ? 'modal_opened' : ''} 
       onClose={onClose}
       children={
-      <form action="#" name="edit-profile" className="modal__form modal__form_type_profile" onSubmit={handleSubmit(onSubmit)}>
+      <form action="#" name="edit-profile" className="modal__form modal__form_type_profile" onSubmit={handleSubmit(onSubmit)} noValidate>
         <input 
           id="name-input" 
           name="name" 
